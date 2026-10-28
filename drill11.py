@@ -85,6 +85,9 @@ class AutoRun:
             boy.x = half_size
             boy.direction = 1
 
+        if elapsed >= 5:
+            boy.change_state(Idle, None)
+
     @staticmethod
     def draw(boy):
         draw_boy(boy)
