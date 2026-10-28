@@ -29,6 +29,26 @@ class Idle:
         draw_boy(boy)
 
 
+class Run:
+    @staticmethod
+    def enter(boy, event):
+        boy.frame = 0
+        boy.direction = -1 if event == 'LEFT' else 1
+
+    @staticmethod
+    def exit(boy, event):
+        pass
+
+    @staticmethod
+    def do(boy):
+        boy.x += boy.direction * 3
+        boy.frame = (boy.frame + 1) % 8
+
+    @staticmethod
+    def draw(boy):
+        draw_boy(boy)
+
+
 class Boy:
     def __init__(self):
         self.image = load_image('run_animation.png')
@@ -37,8 +57,29 @@ class Boy:
         self.frame = 0
         self.direction = 1
         self.size = 70
-        self.state = Idle
-        self.state.enter(self, None)
+        self.state = None
+        self.change_state(Idle, None)
+
+    def change_state(self, new_state, event):
+        if self.state is not None:
+            self.state.exit(self, event)
+        self.state = new_state
+        self.state.enter(self, event)
+
+    def handle_event(self, event):
+        if event.type != SDL_KEYDOWN:
+            return
+
+        if self.state == Idle:
+            if event.key == SDLK_LEFT:
+                self.change_state(Run, 'LEFT')
+            elif event.key == SDLK_RIGHT:
+                self.change_state(Run, 'RIGHT')
+        elif self.state == Run:
+            if event.key == SDLK_LEFT:
+                self.direction = -1
+            elif event.key == SDLK_RIGHT:
+                self.direction = 1
 
     def update(self):
         self.state.do(self)
@@ -65,6 +106,8 @@ def main():
                 running = False
             elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
                 running = False
+            else:
+                boy.handle_event(event)
 
         delay(0.05)
 
