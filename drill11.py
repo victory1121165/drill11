@@ -128,6 +128,11 @@ class Boy:
                 self.direction = -1
             elif event.key == SDLK_RIGHT:
                 self.direction = 1
+        elif self.state == AutoRun:
+            if event.key == SDLK_LEFT:
+                self.change_state(Run, 'LEFT')
+            elif event.key == SDLK_RIGHT:
+                self.change_state(Run, 'RIGHT')
 
     def update(self):
         self.state.do(self)
