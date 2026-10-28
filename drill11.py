@@ -5,8 +5,10 @@ SCREEN_HEIGHT = 600
 
 
 def draw_boy(boy):
-    boy.image.clip_draw(
+    flip = 'h' if boy.direction < 0 else ''
+    boy.image.clip_composite_draw(
         boy.frame * 100, 0, 100, 100,
+        0, flip,
         boy.x, boy.y, boy.size, boy.size
     )
 
