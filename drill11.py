@@ -1,4 +1,5 @@
 from pico2d import *
+import time
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -53,6 +54,30 @@ class Run:
         draw_boy(boy)
 
 
+class AutoRun:
+    @staticmethod
+    def enter(boy, event):
+        boy.frame = 0
+        boy.auto_run_start = time.time()
+        boy.direction = 1
+        boy.run_speed = 4
+        boy.size = 70
+
+    @staticmethod
+    def exit(boy, event):
+        boy.run_speed = 3
+        boy.size = 70
+
+    @staticmethod
+    def do(boy):
+        boy.x += boy.direction * boy.run_speed
+        boy.frame = (boy.frame + 1) % 8
+
+    @staticmethod
+    def draw(boy):
+        draw_boy(boy)
+
+
 class Boy:
     def __init__(self):
         self.image = load_image('run_animation.png')
@@ -60,7 +85,9 @@ class Boy:
         self.y = 90
         self.frame = 0
         self.direction = 1
+        self.run_speed = 3
         self.size = 70
+        self.auto_run_start = 0
         self.state = None
         self.change_state(Idle, None)
 
@@ -75,7 +102,9 @@ class Boy:
             return
 
         if self.state == Idle:
-            if event.key == SDLK_LEFT:
+            if event.key == SDLK_a:
+                self.change_state(AutoRun, 'AUTO')
+            elif event.key == SDLK_LEFT:
                 self.change_state(Run, 'LEFT')
             elif event.key == SDLK_RIGHT:
                 self.change_state(Run, 'RIGHT')
