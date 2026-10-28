@@ -45,6 +45,8 @@ class Run:
     def do(boy):
         boy.x += boy.direction * 3
         boy.frame = (boy.frame + 1) % 8
+        half_size = boy.size / 2
+        boy.x = max(half_size, min(SCREEN_WIDTH - half_size, boy.x))
 
     @staticmethod
     def draw(boy):
