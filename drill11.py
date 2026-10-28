@@ -70,6 +70,10 @@ class AutoRun:
 
     @staticmethod
     def do(boy):
+        elapsed = time.time() - boy.auto_run_start
+        boy.run_speed = min(10, 4 + elapsed * 1.2)
+        boy.size = min(130, 70 + elapsed * 10)
+
         boy.x += boy.direction * boy.run_speed
         boy.frame = (boy.frame + 1) % 8
         half_size = boy.size / 2
