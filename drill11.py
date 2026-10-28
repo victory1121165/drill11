@@ -1,11 +1,20 @@
 from pico2d import *
 import time
+import random
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
 
 def draw_boy(boy):
+    if boy.state == Idle:
+        idle_row = 3 if boy.direction > 0 else 2
+        boy.idle_image.clip_draw(
+            0, idle_row * 100, 100, 100,
+            boy.x, boy.y, boy.size, boy.size
+        )
+        return
+
     flip = 'h' if boy.direction < 0 else ''
     boy.image.clip_composite_draw(
         boy.frame * 100, 0, 100, 100,
@@ -25,7 +34,7 @@ class Idle:
 
     @staticmethod
     def do(boy):
-        boy.frame = (boy.frame + 1) % 8
+        boy.frame = 0
 
     @staticmethod
     def draw(boy):
@@ -59,7 +68,7 @@ class AutoRun:
     def enter(boy, event):
         boy.frame = 0
         boy.auto_run_start = time.time()
-        boy.direction = 1
+        boy.direction = random.choice((-1, 1))
         boy.run_speed = 4
         boy.size = 70
 
@@ -96,6 +105,7 @@ class AutoRun:
 class Boy:
     def __init__(self):
         self.image = load_image('run_animation.png')
+        self.idle_image = load_image('animation_sheet.png')
         self.x = SCREEN_WIDTH // 2
         self.y = 85
         self.frame = 0
