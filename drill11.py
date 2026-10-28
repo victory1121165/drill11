@@ -72,6 +72,14 @@ class AutoRun:
     def do(boy):
         boy.x += boy.direction * boy.run_speed
         boy.frame = (boy.frame + 1) % 8
+        half_size = boy.size / 2
+
+        if boy.x >= SCREEN_WIDTH - half_size:
+            boy.x = SCREEN_WIDTH - half_size
+            boy.direction = -1
+        elif boy.x <= half_size:
+            boy.x = half_size
+            boy.direction = 1
 
     @staticmethod
     def draw(boy):
