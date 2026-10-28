@@ -97,7 +97,7 @@ class Boy:
     def __init__(self):
         self.image = load_image('run_animation.png')
         self.x = SCREEN_WIDTH // 2
-        self.y = 90
+        self.y = 85
         self.frame = 0
         self.direction = 1
         self.run_speed = 3
